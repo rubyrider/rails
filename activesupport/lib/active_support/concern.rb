@@ -156,16 +156,14 @@ module ActiveSupport
     # so that you can write class macros here.
     # When you define more than one +included+ block, it raises an exception.
     def included(base = nil, &block)
-      if base.nil?
-        if instance_variable_defined?(:@_included_block)
-          if @_included_block.source_location != block.source_location
-            raise MultipleIncludedBlocks
-          end
-        else
-          @_included_block = block
+      return super unless base.present?
+
+      if instance_variable_defined?(:@_included_block)
+        if @_included_block.source_location != block.source_location
+          raise MultipleIncludedBlocks
         end
       else
-        super
+        @_included_block = block
       end
     end
 
@@ -173,16 +171,14 @@ module ActiveSupport
     # so that you can write class macros here.
     # When you define more than one +prepended+ block, it raises an exception.
     def prepended(base = nil, &block)
-      if base.nil?
-        if instance_variable_defined?(:@_prepended_block)
-          if @_prepended_block.source_location != block.source_location
-            raise MultiplePrependBlocks
-          end
-        else
-          @_prepended_block = block
+      return super unless base.present?
+
+      if instance_variable_defined?(:@_prepended_block)
+        if @_prepended_block.source_location != block.source_location
+          raise MultiplePrependBlocks
         end
       else
-        super
+        @_prepended_block = block
       end
     end
 
